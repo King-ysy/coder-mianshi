@@ -10,10 +10,7 @@ import com.ysy.mianshiya.common.ResultUtils;
 import com.ysy.mianshiya.constant.UserConstant;
 import com.ysy.mianshiya.exception.BusinessException;
 import com.ysy.mianshiya.exception.ThrowUtils;
-import com.ysy.mianshiya.model.dto.question.QuestionAddRequest;
-import com.ysy.mianshiya.model.dto.question.QuestionEditRequest;
-import com.ysy.mianshiya.model.dto.question.QuestionQueryRequest;
-import com.ysy.mianshiya.model.dto.question.QuestionUpdateRequest;
+import com.ysy.mianshiya.model.dto.question.*;
 import com.ysy.mianshiya.model.entity.Question;
 import com.ysy.mianshiya.model.entity.User;
 import com.ysy.mianshiya.model.vo.QuestionVO;
@@ -257,6 +254,14 @@ public class QuestionController {
         ThrowUtils.throwIf(size > 200, ErrorCode.PARAMS_ERROR);
         Page<Question> questionPage = questionService.searchFromEs(questionQueryRequest);
         return ResultUtils.success(questionService.getQuestionVOPage(questionPage, request));
+    }
+
+    @PostMapping("/delete/batch")
+//    @SaCheckRole(UserConstant.ADMIN_ROLE)
+    public BaseResponse<Boolean> batchDeleteQuestions(@RequestBody QuestionBatchDeleteRequest questionBatchDeleteRequest) {
+        ThrowUtils.throwIf(questionBatchDeleteRequest == null, ErrorCode.PARAMS_ERROR);
+        questionService.batchDeleteQuestions(questionBatchDeleteRequest.getQuestionIdList());
+        return ResultUtils.success(true);
     }
 
 
